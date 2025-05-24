@@ -59,7 +59,7 @@
         }
         /* Accordion styles */
         .accordion-content {
-            max-height: 0;
+            /* max-height: 0; MODIFIED: Initial max-height will be set by JS */
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
@@ -103,8 +103,8 @@
             padding: 0.5rem; 
             border-radius: 0.75rem;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            max-width: 45vw; /* MODIFIED: Made modal content smaller */
-            max-height: 45vh; /* MODIFIED: Made modal content smaller */
+            max-width: 75vw; 
+            max-height: 75vh; 
             display: flex; 
             align-items: center;
             justify-content: center;
@@ -447,12 +447,17 @@
             totalScoreDisplay.textContent = total;
         }
         
-        accordionToggle.addEventListener('click', () => {
+        // MODIFIED: Function to toggle accordion state
+        function toggleAccordion() {
             const isExpanded = accordionToggle.getAttribute('aria-expanded') === 'true' || false;
             accordionToggle.setAttribute('aria-expanded', !isExpanded);
             accordionContent.style.maxHeight = !isExpanded ? accordionContent.scrollHeight + "px" : null;
             accordionIcon.classList.toggle('rotate-180', !isExpanded);
-        });
+        }
+
+        // MODIFIED: Event listener for accordion toggle
+        accordionToggle.addEventListener('click', toggleAccordion);
+
 
         // Image Modal Functions
         function openImageModal(imageUrlFromCard, altText) {
@@ -477,7 +482,13 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', initializeScoring);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeScoring();
+            // MODIFIED: Expand accordion by default
+            accordionToggle.setAttribute('aria-expanded', 'true');
+            accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+            accordionIcon.classList.add('rotate-180');
+        });
     </script>
 
 </body>
