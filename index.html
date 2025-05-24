@@ -447,12 +447,21 @@
             totalScoreDisplay.textContent = total;
         }
         
-        // MODIFIED: Function to toggle accordion state
+        // MODIFIED: Updated toggleAccordion function
         function toggleAccordion() {
-            const isExpanded = accordionToggle.getAttribute('aria-expanded') === 'true' || false;
-            accordionToggle.setAttribute('aria-expanded', !isExpanded);
-            accordionContent.style.maxHeight = !isExpanded ? accordionContent.scrollHeight + "px" : null;
-            accordionIcon.classList.toggle('rotate-180', !isExpanded);
+            const isCurrentlyExpanded = accordionToggle.getAttribute('aria-expanded') === 'true';
+            
+            if (isCurrentlyExpanded) {
+                // Action: Collapse
+                accordionToggle.setAttribute('aria-expanded', 'false');
+                accordionContent.style.maxHeight = '0px'; // Explicitly collapse to 0
+                accordionIcon.classList.remove('rotate-180');
+            } else {
+                // Action: Expand
+                accordionToggle.setAttribute('aria-expanded', 'true');
+                accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+                accordionIcon.classList.add('rotate-180');
+            }
         }
 
         // MODIFIED: Event listener for accordion toggle
