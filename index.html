@@ -146,8 +146,12 @@
         <section id="introduction" class="mb-8 p-6 bg-white rounded-lg shadow-lg">
             <h2 class="text-2xl font-semibold text-slate-700 mb-3">About the Total Calcification Score (TCS)</h2>
             <p class="text-slate-600 leading-relaxed">
-                The Total Calcification Score (TCS) is a quantitative measure used to assess the extent and severity of brain calcifications. It involves analyzing specific brain locations for the presence and characteristics of calcifications. Each location is assigned a score based on a visual rating scale,
+                The Total Calcification Score (TCS) is a quantitative measure used to assess the extent and severity of brain calcifications.<sup>[1]</sup> It involves analyzing specific brain locations for the presence and characteristics of calcifications. Each location is assigned a score based on a visual rating scale,
                 and these scores are summed to produce the TCS. This tool helps illustrate how scores are assigned and totaled.
+            </p>
+            <p class="text-slate-500 text-sm mt-4">
+                <br>
+                [1] <cite>Nicolas G, Pottier C, Charbonnier C, et al. Phenotypic spectrum of probable and genetically-confirmed idiopathic basal ganglia calcification. Brain. 2013;136(Pt 11):3395-3407. doi:10.1093/brain/awt255</cite>
             </p>
         </section>
 
@@ -194,7 +198,15 @@
             <p class="text-sm text-slate-500 mt-2">
                 Maximum possible raw score: 80. Note: This calculator sums all selected scores based on the available regions.
             </p>
-        </div>
+            <div class="mt-4 flex justify-center gap-4">
+                <button id="export-csv-btn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out">
+                    Export Scores to CSV
+                </button>
+                <button id="clear-scores-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out">
+                    Clear All Scores
+                </button>
+            </div>
+            </div>
     </footer>
 
     <div id="image-modal" class="image-modal-overlay">
@@ -249,6 +261,102 @@
         const imageModalCloseBtn = document.getElementById('image-modal-close-btn');
 
 
+        const exportCsvBtn = document.getElementById('export-csv-btn');
+        const clearScoresBtn = document.getElementById('clear-scores-btn');
+
+        function exportScoresToCSV() {
+            let headers = [];
+            let scores = [];
+
+            // Add regional scores
+            brainRegions.forEach(region => {
+                // Sanitize region name for CSV (e.g., escape double quotes if any)
+                const regionName = region.name.replace(/"/g, '""'); 
+                headers.push(`"${regionName}"`); // Enclose in quotes in case of commas in names
+                
+                const score = regionScores[region.id] || 0;
+                scores.push(score);
+            });
+
+            // Add total score
+            headers.push("Total Calcification Score (TCS)");
+            scores.push(totalScoreDisplay.textContent);
+
+            // Construct CSV content
+            // Join headers with commas for the first line
+            // Join scores with commas for the second line
+            let csvContent = headers.join(",") + "\n" + scores.join(",") + "\n";
+
+            // Create a blob and trigger download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            if (link.download !== undefined) { // Feature detection
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "tcs_scores.csv");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("CSV export is not supported in your browser.");
+            }
+        }
+
+        function clearAllScores() {
+            brainRegions.forEach(region => {
+                regionScores[region.id] = 0; // Reset score in the data object
+
+                // Update the displayed score for this region on its card
+                const currentScoreDisplay = document.getElementById(`current-score-${region.id}`);
+                if (currentScoreDisplay) {
+                    currentScoreDisplay.textContent = '0';
+                }
+
+                // Reset button selections for this region
+                // Find the container of the buttons for this region
+                let buttonContainer;
+                const cardForRegion = document.querySelector(`.score-button[data-region-id="${region.id}"]`)?.closest('.flex-1'); // For paired regions
+                if (cardForRegion) {
+                    buttonContainer = cardForRegion;
+                } else {
+                    const singleCardButtons = document.querySelector(`.score-button[data-region-id="${region.id}"]`)?.parentElement; // For single regions
+                    if(singleCardButtons?.parentElement.classList.contains('region-card')) { // Check if it's a direct child of region-card's div
+                         buttonContainer = singleCardButtons;
+                    } else {
+                        // Fallback if structure is different, search more broadly within the card
+                        const cardElement = document.getElementById(`card-single-${region.id.replace(/\s+/g, '_')}`) || 
+                                            document.querySelector(`.score-button[data-region-id="${region.id}"]`)?.closest('.region-card');
+                        if(cardElement){
+                            buttonContainer = cardElement.querySelector(`.score-button[data-region-id="${region.id}"]`)?.parentElement;
+                        }
+                    }
+                }
+                
+                if (buttonContainer) {
+                    const buttons = buttonContainer.querySelectorAll(`.score-button[data-region-id="${region.id}"]`);
+                    buttons.forEach(btn => {
+                        btn.classList.remove('selected');
+                        if (btn.dataset.score === '0') {
+                            btn.classList.add('selected');
+                        }
+                    });
+                } else {
+                     // If the above logic fails, try a more global selection (less efficient but a fallback)
+                    document.querySelectorAll(`.score-button[data-region-id="${region.id}"]`).forEach(btn => {
+                        btn.classList.remove('selected');
+                        if (btn.dataset.score === '0') {
+                            btn.classList.add('selected');
+                        }
+                    });
+                }
+            });
+            updateTotalScore(); // Update the total score display
+            // console.log("All scores cleared.", regionScores); // For debugging
+        }
+
+
+
         function initializeScoring() {
             const processedGroups = new Set();
             brainRegions.forEach(region => {
@@ -291,7 +399,6 @@
             const imageId = `img-group-${groupName.replace(/\s+/g, '_')}`; 
             const hasImage = regionsWithImages.includes(leftRegion.exampleImageBase); 
             const imageName = hasImage ? imageFileMap[leftRegion.exampleImageBase] : '';
-
 
             const card = document.createElement('div');
             card.className = 'region-card p-6 md:p-8 flex flex-col space-y-4';
@@ -497,6 +604,13 @@
             accordionToggle.setAttribute('aria-expanded', 'true');
             accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
             accordionIcon.classList.add('rotate-180');
+            // Event listeners for new buttons
+            if(exportCsvBtn) {
+                exportCsvBtn.addEventListener('click', exportScoresToCSV);
+            }
+            if(clearScoresBtn) {
+                clearScoresBtn.addEventListener('click', clearAllScores);
+            }
         });
     </script>
 
