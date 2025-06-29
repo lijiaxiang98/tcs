@@ -16,8 +16,8 @@
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            display: flex; 
-            flex-direction: column; 
+            display: flex;
+            flex-direction: column;
         }
         .region-card:hover {
             transform: translateY(-2px);
@@ -63,17 +63,17 @@
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
-        .image-container { 
+        .image-container {
             cursor: pointer;
             max-width: 320px; /* Constrain the width of the image container on the card */
-            margin-left: auto; 
-            margin-right: auto; 
+            margin-left: auto;
+            margin-right: auto;
             background-color: #e9ecef; /* Fallback background for image area */
         }
         .image-container img {
-            max-width: 100%; 
-            height: auto; 
-            border-radius: 0.5rem; 
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
         }
 
         /* Image Modal Styles */
@@ -83,11 +83,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8); 
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000; 
+            z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -100,24 +100,24 @@
         .image-modal-content {
             position: relative;
             background-color: white;
-            padding: 0.5rem; 
+            padding: 0.5rem;
             border-radius: 0.75rem;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            max-width: 45vw; 
-            max-height: 45vh; 
-            display: flex; 
+            max-width: 45vw;
+            max-height: 45vh;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
         .image-modal-content img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; 
-            border-radius: 0.5rem; 
+            object-fit: contain;
+            border-radius: 0.5rem;
         }
         .image-modal-close-btn {
             position: absolute;
-            top: -10px; 
+            top: -10px;
             right: -10px;
             background-color: white;
             color: #333;
@@ -174,19 +174,12 @@
                         <li><strong>Score 4:</strong> Severe calcification (maximal apparent density, covering a large proportion of the location).</li>
                         <li><strong>Score 5:</strong> Severe (as score 4) and confluent with at least one severe calcification of an adjacent location (among other scored locations).</li>
                     </ul>
-                    <p class="text-slate-600 mt-4 text-sm">
-                        <strong>Specific criteria for certain regions:</strong><br>
-                        - Cerebellar Hemispheres (Score 5): If confluent with vermis calcification (score 4), or if score 4 applies and area covers > half hemi-posterior fossa.<br>
-                        - Cortical Calcification (Score 4): Maximum density involving several cortical areas. (Score 5): If severe and confluent with adjacent severe white matter calcification, or severe and confluent within the cortex (sulci unidentifiable).<br>
-                        - Pons/Medulla (Score 4): Calcified area covers > 1/3 of the surface in the most severe slice.
-                    </p>
                 </div>
             </div>
         </section>
 
         <section id="scoring-grid" class="grid grid-cols-1 gap-8 mb-8">
-            
-        </section>
+            </section>
 
     </main>
 
@@ -217,27 +210,28 @@
     </div>
 
     <script>
+        // MODIFIED: Added 'note' property with specific criteria for each region group
         const brainRegions = [
-            { id: "lenticular_left", name: "Left Lenticular Nucleus", group: "Lenticular Nucleus", side: "Left", exampleImageBase: "Lenticular Nucleus" },
-            { id: "lenticular_right", name: "Right Lenticular Nucleus", group: "Lenticular Nucleus", side: "Right", exampleImageBase: "Lenticular Nucleus" },
-            { id: "caudate_left", name: "Left Caudate Nucleus", group: "Caudate Nucleus", side: "Left", exampleImageBase: "Caudate Nucleus (No Image)" },
-            { id: "caudate_right", name: "Right Caudate Nucleus", group: "Caudate Nucleus", side: "Right", exampleImageBase: "Caudate Nucleus (No Image)" },
-            { id: "thalamus_left", name: "Left Thalamus", group: "Thalamus", side: "Left", exampleImageBase: "Thalamus" },
-            { id: "thalamus_right", name: "Right Thalamus", group: "Thalamus", side: "Right", exampleImageBase: "Thalamus" },
-            { id: "white_matter_subcortical_left", name: "Left Cerebral Subcortical White Matter", group: "Cerebral Subcortical White Matter", side: "Left", exampleImageBase: "Cerebral White Matter" },
-            { id: "white_matter_subcortical_right", name: "Right Cerebral Subcortical White Matter", group: "Cerebral Subcortical White Matter", side: "Right", exampleImageBase: "Cerebral White Matter" },
-            { id: "cerebral_cortex", name: "Cerebral Cortex", group: "Cerebral Cortex", side: null, exampleImageBase: "Cerebral Cortex" },
-            { id: "cerebellar_hemisphere_left", name: "Left Cerebellar Hemisphere", group: "Cerebellar Hemisphere", side: "Left", exampleImageBase: "Cerebellar Hemisphere" },
-            { id: "cerebellar_hemisphere_right", name: "Right Cerebellar Hemisphere", group: "Cerebellar Hemisphere", side: "Right", exampleImageBase: "Cerebellar Hemisphere" },
-            { id: "vermis", name: "Vermis", group: "Vermis", side: null, exampleImageBase: "Vermis (No Image)" },
-            { id: "midbrain_left", name: "Left Midbrain", group: "Midbrain", side: "Left", exampleImageBase: "Midbrain (No Image)" },
-            { id: "midbrain_right", name: "Right Midbrain", group: "Midbrain", side: "Right", exampleImageBase: "Midbrain (No Image)" },
-            { id: "pons", name: "Pons", group: "Pons", side: null, exampleImageBase: "Pons (No Image)" },
-            { id: "medulla", name: "Medulla", group: "Medulla", side: null, exampleImageBase: "Medulla (No Image)" }
+            { id: "lenticular_left", name: "Left Lenticular Nucleus", group: "Lenticular Nucleus", side: "Left", exampleImageBase: "Lenticular Nucleus", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "lenticular_right", name: "Right Lenticular Nucleus", group: "Lenticular Nucleus", side: "Right", exampleImageBase: "Lenticular Nucleus", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "caudate_left", name: "Left Caudate Nucleus", group: "Caudate Nucleus", side: "Left", exampleImageBase: "Caudate Nucleus (No Image)", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "caudate_right", name: "Right Caudate Nucleus", group: "Caudate Nucleus", side: "Right", exampleImageBase: "Caudate Nucleus (No Image)", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "thalamus_left", name: "Left Thalamus", group: "Thalamus", side: "Left", exampleImageBase: "Thalamus", note: "<b>Score 3:</b> Pulvinar-only calcification.<br><b>Score 4:</b> Calcification extending to other thalamic nuclei." },
+            { id: "thalamus_right", name: "Right Thalamus", group: "Thalamus", side: "Right", exampleImageBase: "Thalamus", note: "<b>Score 3:</b> Pulvinar-only calcification.<br><b>Score 4:</b> Calcification extending to other thalamic nuclei." },
+            { id: "white_matter_subcortical_left", name: "Left Cerebral Subcortical White Matter", group: "Cerebral Subcortical White Matter", side: "Left", exampleImageBase: "Cerebral White Matter", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "white_matter_subcortical_right", name: "Right Cerebral Subcortical White Matter", group: "Cerebral Subcortical White Matter", side: "Right", exampleImageBase: "Cerebral White Matter", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "cerebral_cortex", name: "Cerebral Cortex", group: "Cerebral Cortex", side: null, exampleImageBase: "Cerebral Cortex", note: "<b>Score 4:</b> Max density in several areas (e.g., occipital, sulci depth).<br><b>Score 5:</b> Severe & confluent with adjacent severe white matter, OR severe & confluent within the same structure, so that the sulci are unidentifiable.<br><i>Note: Hippocampus calcification is common in population and not regarded as a cortical area here.</i>" },
+            { id: "cerebellar_hemisphere_left", name: "Left Cerebellar Hemisphere", group: "Cerebellar Hemisphere", side: "Left", exampleImageBase: "Cerebellar Hemisphere", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location.<br><b>Score 5:</b> Confluent with a score 4 vermis calcification, OR if score 4 criteria are met and the area covers >1/2 of the hemi-posterior fossa." },
+            { id: "cerebellar_hemisphere_right", name: "Right Cerebellar Hemisphere", group: "Cerebellar Hemisphere", side: "Right", exampleImageBase: "Cerebellar Hemisphere", note: "<b>Score 3 vs 4:</b> 'Large proportion' is defined as >1/3 of the area.<br><b>Score 5:</b> Confluent with a score 4 vermis calcification, OR if score 4 criteria are met and the area covers >1/2 of the hemi-posterior fossa." },
+            { id: "vermis", name: "Vermis", group: "Vermis", side: null, exampleImageBase: "Vermis (No Image)", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "midbrain_left", name: "Left Midbrain", group: "Midbrain", side: "Left", exampleImageBase: "Midbrain (No Image)", note: "<b>Score 3:</b> Red nucleus-only calcification.<br><b>Score 4:</b> Extension to other midbrain nuclei.<br><b>Score 5:</b> Meets score 4 criteria AND fuses with a score 4 thalamic or pontine calcification." },
+            { id: "midbrain_right", name: "Right Midbrain", group: "Midbrain", side: "Right", exampleImageBase: "Midbrain (No Image)", note: "<b>Score 3:</b> Red nucleus-only calcification.<br><b>Score 4:</b> Extension to other midbrain nuclei.<br><b>Score 5:</b> Meets score 4 criteria AND fuses with a score 4 thalamic or pontine calcification." },
+            { id: "pons", name: "Pons", group: "Pons", side: null, exampleImageBase: "Pons (No Image)", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." },
+            { id: "medulla", name: "Medulla", group: "Medulla", side: null, exampleImageBase: "Medulla (No Image)", note: "To distinguish between <b>score 3</b> and <b>4</b>, 'a large proportion' is defined as >1/3 of the location." }
         ];
 
         const regionsWithImages = ["Lenticular Nucleus", "Thalamus", "Cerebral White Matter", "Cerebral Cortex", "Cerebellar Hemisphere"];
-        
+
         // Map exampleImageBase to actual filenames
         const imageFileMap = {
             "Lenticular Nucleus": "lenticular.jpg",
@@ -270,10 +264,8 @@
 
             // Add regional scores
             brainRegions.forEach(region => {
-                // Sanitize region name for CSV (e.g., escape double quotes if any)
-                const regionName = region.name.replace(/"/g, '""'); 
-                headers.push(`"${regionName}"`); // Enclose in quotes in case of commas in names
-                
+                const regionName = region.name.replace(/"/g, '""');
+                headers.push(`"${regionName}"`);
                 const score = regionScores[region.id] || 0;
                 scores.push(score);
             });
@@ -282,15 +274,11 @@
             headers.push("Total Calcification Score (TCS)");
             scores.push(totalScoreDisplay.textContent);
 
-            // Construct CSV content
-            // Join headers with commas for the first line
-            // Join scores with commas for the second line
             let csvContent = headers.join(",") + "\n" + scores.join(",") + "\n";
 
-            // Create a blob and trigger download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            if (link.download !== undefined) { // Feature detection
+            if (link.download !== undefined) {
                 const url = URL.createObjectURL(blob);
                 link.setAttribute("href", url);
                 link.setAttribute("download", "tcs_scores.csv");
@@ -304,58 +292,23 @@
         }
 
         function clearAllScores() {
-            brainRegions.forEach(region => {
-                regionScores[region.id] = 0; // Reset score in the data object
+            Object.keys(regionScores).forEach(regionId => {
+                regionScores[regionId] = 0;
+            });
 
-                // Update the displayed score for this region on its card
-                const currentScoreDisplay = document.getElementById(`current-score-${region.id}`);
-                if (currentScoreDisplay) {
-                    currentScoreDisplay.textContent = '0';
-                }
-
-                // Reset button selections for this region
-                // Find the container of the buttons for this region
-                let buttonContainer;
-                const cardForRegion = document.querySelector(`.score-button[data-region-id="${region.id}"]`)?.closest('.flex-1'); // For paired regions
-                if (cardForRegion) {
-                    buttonContainer = cardForRegion;
-                } else {
-                    const singleCardButtons = document.querySelector(`.score-button[data-region-id="${region.id}"]`)?.parentElement; // For single regions
-                    if(singleCardButtons?.parentElement.classList.contains('region-card')) { // Check if it's a direct child of region-card's div
-                         buttonContainer = singleCardButtons;
-                    } else {
-                        // Fallback if structure is different, search more broadly within the card
-                        const cardElement = document.getElementById(`card-single-${region.id.replace(/\s+/g, '_')}`) || 
-                                            document.querySelector(`.score-button[data-region-id="${region.id}"]`)?.closest('.region-card');
-                        if(cardElement){
-                            buttonContainer = cardElement.querySelector(`.score-button[data-region-id="${region.id}"]`)?.parentElement;
-                        }
-                    }
-                }
-                
-                if (buttonContainer) {
-                    const buttons = buttonContainer.querySelectorAll(`.score-button[data-region-id="${region.id}"]`);
-                    buttons.forEach(btn => {
-                        btn.classList.remove('selected');
-                        if (btn.dataset.score === '0') {
-                            btn.classList.add('selected');
-                        }
-                    });
-                } else {
-                     // If the above logic fails, try a more global selection (less efficient but a fallback)
-                    document.querySelectorAll(`.score-button[data-region-id="${region.id}"]`).forEach(btn => {
-                        btn.classList.remove('selected');
-                        if (btn.dataset.score === '0') {
-                            btn.classList.add('selected');
-                        }
-                    });
+             // Reset all buttons and score displays on the page
+            document.querySelectorAll('.score-button').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.dataset.score === '0') {
+                    btn.classList.add('selected');
                 }
             });
-            updateTotalScore(); // Update the total score display
-            // console.log("All scores cleared.", regionScores); // For debugging
+            document.querySelectorAll('[id^="current-score-"]').forEach(span => {
+                span.textContent = '0';
+            });
+
+            updateTotalScore();
         }
-
-
 
         function initializeScoring() {
             const processedGroups = new Set();
@@ -372,19 +325,19 @@
                 } else if (!region.side && !processedGroups.has(region.group)) {
                     const card = createSingleRegionCard(region);
                     scoringGrid.appendChild(card);
-                    processedGroups.add(region.group); 
+                    processedGroups.add(region.group);
                 }
             });
             updateTotalScore();
         }
-        
+
         function createScoreButtonsHTML(regionId, defaultScore = 0) {
              let buttonsHTML = '<div class="flex flex-wrap gap-2 justify-center">';
             for (let i = 0; i <= 5; i++) {
                 buttonsHTML += `
-                    <button 
+                    <button
                         class="score-button w-10 h-10 md:w-12 md:h-12 rounded-full border border-slate-300 text-slate-600 font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 ${i === defaultScore ? 'selected' : ''}"
-                        data-region-id="${regionId}" 
+                        data-region-id="${regionId}"
                         data-score="${i}">
                         ${i}
                     </button>`;
@@ -393,11 +346,12 @@
             return buttonsHTML;
         }
 
+        // MODIFIED: Function updated to include a criteria note section.
         function createPairedRegionCard(leftRegion, rightRegion) {
-            const groupName = leftRegion.group; 
+            const groupName = leftRegion.group;
             const cardId = `card-group-${groupName.replace(/\s+/g, '_')}`;
-            const imageId = `img-group-${groupName.replace(/\s+/g, '_')}`; 
-            const hasImage = regionsWithImages.includes(leftRegion.exampleImageBase); 
+            const imageId = `img-group-${groupName.replace(/\s+/g, '_')}`;
+            const hasImage = regionsWithImages.includes(leftRegion.exampleImageBase);
             const imageName = hasImage ? imageFileMap[leftRegion.exampleImageBase] : '';
 
             const card = document.createElement('div');
@@ -405,15 +359,18 @@
             card.id = cardId;
 
             let titleHTML = `<h3 class="text-xl md:text-2xl font-semibold text-slate-700 text-center">${groupName}</h3>`;
+
+            // NEW: Criteria Note HTML
+            let noteHTML = '';
             if (leftRegion.note) {
-                titleHTML += `<p class="text-sm text-amber-600 italic text-center">${leftRegion.note}</p>`;
+                 noteHTML = `<div class="bg-amber-50 border-l-4 border-amber-400 text-amber-800 p-3 rounded-md my-4 text-sm leading-relaxed">${leftRegion.note}</div>`;
             }
 
             let imageHTML = '';
             if (hasImage && imageName) {
                 imageHTML = `
                     <div class="image-container rounded-lg overflow-hidden mt-3 shadow-inner" data-img-id="${imageId}">
-                        <img id="${imageId}" src="${imageName}" 
+                        <img id="${imageId}" src="${imageName}"
                              alt="Example for ${groupName}" class="object-cover w-full">
                     </div>`;
             }
@@ -424,7 +381,8 @@
             const contentHTML = `
                 ${titleHTML}
                 ${imageHTML}
-                <div class="flex flex-col sm:flex-row gap-4 md:gap-6 ${hasImage ? 'mt-4' : 'mt-6 flex-grow'}">
+                ${noteHTML}
+                <div class="flex flex-col sm:flex-row gap-4 md:gap-6 mt-2 flex-grow">
                     <div class="flex-1 p-4 border border-slate-200 rounded-lg bg-slate-50/50 flex flex-col justify-between">
                         <div>
                             <h4 class="text-lg font-medium text-slate-600 text-center mb-3">${rightRegion.side}</h4>
@@ -453,9 +411,9 @@
 
             if (hasImage && imageName) {
                 const imageContainer = card.querySelector('.image-container');
-                if (imageContainer) { 
+                if (imageContainer) {
                     imageContainer.addEventListener('click', () => {
-                        const imgElement = card.querySelector(`#${imageId}`); 
+                        const imgElement = card.querySelector(`#${imageId}`);
                         if (imgElement) {
                            openImageModal(imgElement.src, imgElement.alt);
                         }
@@ -465,39 +423,42 @@
             return card;
         }
 
+        // MODIFIED: Function updated to include a criteria note section.
         function createSingleRegionCard(region) {
             const cardId = `card-single-${region.id.replace(/\s+/g, '_')}`;
-            const imageId = `img-single-${region.id.replace(/\s+/g, '_')}`; 
+            const imageId = `img-single-${region.id.replace(/\s+/g, '_')}`;
             const hasImage = regionsWithImages.includes(region.exampleImageBase);
             const imageName = hasImage ? imageFileMap[region.exampleImageBase] : '';
-
 
             const card = document.createElement('div');
             card.className = `region-card p-6 md:p-8 flex flex-col space-y-4 ${!hasImage ? 'items-center justify-center text-center' : ''}`;
             card.id = cardId;
-            
+
             let nameHTML = `<h3 class="text-xl md:text-2xl font-semibold text-slate-700 ${hasImage ? 'text-center' : ''}">${region.name}</h3>`;
-            if (region.note) { 
-                nameHTML += `<p class="text-sm text-amber-600 italic ${hasImage ? 'text-center' : ''}">${region.note}</p>`;
+
+            // NEW: Criteria Note HTML
+            let noteHTML = '';
+            if (region.note) {
+                noteHTML = `<div class="bg-amber-50 border-l-4 border-amber-400 text-amber-800 p-3 rounded-md my-4 text-sm text-left leading-relaxed">${region.note}</div>`;
             }
 
             let imageHTML = '';
             if (hasImage && imageName) {
                 imageHTML = `
                     <div class="image-container rounded-lg overflow-hidden mt-3 shadow-inner" data-img-id="${imageId}">
-                        <img id="${imageId}" src="${imageName}" 
+                        <img id="${imageId}" src="${imageName}"
                              alt="Example for ${region.name}" class="object-cover w-full">
                     </div>`;
             }
-            
+
             const buttonsHTML = createScoreButtonsHTML(region.id, 0);
             const currentScoreHTML = `
                 <p class="text-md text-center text-slate-500 mt-3">
                     Selected Score: <span id="current-score-${region.id}" class="font-bold text-blue-600">0</span>
                 </p>`;
-            
-            card.innerHTML = nameHTML + imageHTML + 
-                             `<div class="${!hasImage ? 'mt-6' : 'mt-4'}">` +
+
+            card.innerHTML = nameHTML + imageHTML + noteHTML +
+                             `<div class="${!hasImage ? 'mt-4' : 'mt-2'}">` +
                              buttonsHTML + currentScoreHTML +
                              `</div>`;
 
@@ -507,9 +468,9 @@
 
             if (hasImage && imageName) {
                 const imageContainer = card.querySelector('.image-container');
-                 if (imageContainer) { 
+                 if (imageContainer) {
                     imageContainer.addEventListener('click', () => {
-                        const imgElement = card.querySelector(`#${imageId}`); 
+                        const imgElement = card.querySelector(`#${imageId}`);
                         if (imgElement) {
                            openImageModal(imgElement.src, imgElement.alt);
                         }
@@ -519,32 +480,30 @@
             return card;
         }
 
+
         function handleScoreSelection(event) {
             const button = event.currentTarget;
-            const regionId = button.dataset.regionId; 
+            const regionId = button.dataset.regionId;
             const score = parseInt(button.dataset.score);
 
             regionScores[regionId] = score;
 
-            const regionDefinition = brainRegions.find(r => r.id === regionId);
-            if (!regionDefinition) return;
+            // Find all buttons for this region ID and update their 'selected' class
+            document.querySelectorAll(`.score-button[data-region-id="${regionId}"]`).forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
 
-            let buttonContainer = button.closest('.flex-1'); 
-            if (!buttonContainer) { 
-                 buttonContainer = button.parentElement.parentElement;
+
+            // Update the score display for the specific region
+            const scoreDisplay = document.getElementById(`current-score-${regionId}`);
+            if (scoreDisplay) {
+                scoreDisplay.textContent = score;
             }
 
-            if (buttonContainer) {
-                 buttonContainer.querySelectorAll(`.score-button[data-region-id="${regionId}"]`).forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                button.classList.add('selected');
-            }
-
-            document.getElementById(`current-score-${regionId}`).textContent = score;
-            
             updateTotalScore();
         }
+
 
         function updateTotalScore() {
             let total = 0;
@@ -553,15 +512,14 @@
             }
             totalScoreDisplay.textContent = total;
         }
-        
-        // MODIFIED: Updated toggleAccordion function
+
         function toggleAccordion() {
             const isCurrentlyExpanded = accordionToggle.getAttribute('aria-expanded') === 'true';
-            
+
             if (isCurrentlyExpanded) {
                 // Action: Collapse
                 accordionToggle.setAttribute('aria-expanded', 'false');
-                accordionContent.style.maxHeight = '0px'; // Explicitly collapse to 0
+                accordionContent.style.maxHeight = '0px';
                 accordionIcon.classList.remove('rotate-180');
             } else {
                 // Action: Expand
@@ -571,7 +529,6 @@
             }
         }
 
-        // MODIFIED: Event listener for accordion toggle
         accordionToggle.addEventListener('click', toggleAccordion);
 
 
@@ -587,7 +544,7 @@
         }
 
         imageModalCloseBtn.addEventListener('click', closeImageModal);
-        imageModal.addEventListener('click', (event) => { 
+        imageModal.addEventListener('click', (event) => {
             if (event.target === imageModal) {
                 closeImageModal();
             }
@@ -600,11 +557,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initializeScoring();
-            // MODIFIED: Expand accordion by default
+            // Expand accordion by default
             accordionToggle.setAttribute('aria-expanded', 'true');
             accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
             accordionIcon.classList.add('rotate-180');
-            // Event listeners for new buttons
+            
             if(exportCsvBtn) {
                 exportCsvBtn.addEventListener('click', exportScoresToCSV);
             }
